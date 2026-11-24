@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Tarjetas</title></head><body>
+<article class="recipe-card" th:fragment="card(receta)">
+  <a class="card-photo" th:href="@{/receta/{slug}(slug=${receta.slug})}" th:aria-label="|Ver detalle de ${receta.nombre}|">
+    <img th:src="${receta.imagen}" th:alt="${receta.fotoAlt}" th:attr="data-fallback=@{/images/food-fallback.svg}" loading="lazy" decoding="async">
+    <span class="photo-badge" th:text="${receta.dificultad}">Fácil</span>
+  </a>
+  <div class="card-content">
+    <div class="card-meta"><span th:text="${receta.cocina}">Italiana</span><span class="meta-dot">·</span><span th:text="|${receta.minutos} min|">25 min</span></div>
+    <h3><a th:href="@{/receta/{slug}(slug=${receta.slug})}" th:text="${receta.nombre}">Pasta al pesto</a></h3>
+    <p th:text="${receta.resumen}">Descripción de receta</p>
+    <a class="text-link" th:href="@{/receta/{slug}(slug=${receta.slug})}">Ver receta <span aria-hidden="true">↗</span></a>
+  </div>
+</article>
+</body></html>

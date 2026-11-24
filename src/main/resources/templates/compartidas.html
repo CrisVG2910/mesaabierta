@@ -1,0 +1,13 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recetas compartidas · Mesa Abierta</title><link rel="stylesheet" th:href="@{/css/styles.css}">
+<script th:src="@{/js/main.js}" defer></script></head>
+<body><header th:replace="~{fragments/layout :: header}"></header>
+<main><section class="detail-intro"><div class="container"><div class="eyebrow light">ENTRE AMIGOS</div><h1>Compartidas en <em>Mesa Abierta.</em></h1>
+<p>Descubre lo que los autores han compartido dentro de la comunidad.</p></div></section>
+<section class="section-pad"><div class="container"><div class="shared-list">
+<p th:if="${#lists.isEmpty(compartidas)}">Todavía no se han compartido recetas en el sitio.</p>
+<article th:each="item : ${compartidas}" class="shared-item"><div><h2 th:text="${item.titulo}">Receta</h2>
+<p th:text="|Compartida por ${item.autor}|">Autor</p></div>
+<a class="btn btn-accent" th:href="@{/receta/{slug}(slug=${item.receta})}">Ver receta ↗</a></article>
+</div></div></section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

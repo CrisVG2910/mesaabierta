@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" th:content="${receta.resumen}">
+  <title th:text="|${receta.nombre} · Mesa Abierta|">Detalle de receta</title>
+  <link rel="icon" th:href="@{/favicon.svg}" type="image/svg+xml"><link rel="stylesheet" th:href="@{/css/styles.css}"><script th:src="@{/js/main.js}" defer></script>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main>
+  <section class="detail-intro"><div class="container"><div class="breadcrumb"><a th:href="@{/}">Inicio</a><span>/</span><a th:href="@{/buscar}">Recetas</a><span>/</span><span th:text="${receta.nombre}">Receta</span></div><div class="detail-title-wrap"><div><div class="eyebrow"><span class="eyebrow-rule"></span><span th:text="|${receta.cocina} · ${receta.pais}|">Italiana · Italia</span></div><h1 th:text="${receta.nombre}">Pasta al pesto</h1><p th:text="${receta.introduccion}">Introducción</p></div><div class="detail-asterisk" aria-hidden="true">✳</div></div></div></section>
+  <section class="detail-main"><div class="container">
+    <div class="detail-image"><img th:src="${receta.imagen}" th:alt="${receta.fotoAlt}" th:attr="data-fallback=@{/images/food-fallback.svg}"></div>
+    <div class="quick-facts"><div><span>TIEMPO TOTAL</span><strong th:text="|${receta.minutos} min|">25 min</strong></div><div><span>DIFICULTAD</span><strong th:text="${receta.dificultad}">Fácil</strong></div><div><span>PORCIONES</span><strong th:text="|${receta.porciones} personas|">2 personas</strong></div><div><span>ORIGEN</span><strong th:text="${receta.pais}">Italia</strong></div></div>
+    <div class="detail-columns">
+      <aside class="ingredients-col"><div class="eyebrow"><span class="eyebrow-rule"></span> TODO LO QUE NECESITAS</div><h2>Los <em>ingredientes.</em></h2><p class="ingredient-hint">Para <span th:text="|${receta.porciones} personas|">2 personas</span></p><ul class="ingredient-list"><li th:each="ingrediente : ${receta.ingredientes}"><span class="ingredient-icon" aria-hidden="true">✓</span><span th:text="${ingrediente}">Ingrediente</span></li></ul><div class="cook-note"><span aria-hidden="true">✳</span><p>El mejor ingrediente siempre es tomarse el tiempo para disfrutar el proceso.</p></div></aside>
+      <div class="steps-col"><div class="eyebrow"><span class="eyebrow-rule"></span> PASO A PASO</div><h2>Manos a <em>la obra.</em></h2><p>Prepara tus ingredientes, pon tu música favorita y disfruta cocinando.</p><ol class="steps-list"><li th:each="paso, estado : ${receta.pasos}"><span class="step-number" th:text="${#numbers.formatInteger(estado.count, 2)}">01</span><p th:text="${paso}">Paso</p></li></ol><div class="recipe-tags"><span th:each="etiqueta : ${receta.etiquetas}" th:text="${etiqueta}">Etiqueta</span></div></div>
+    </div>
+  </div></section>
+  <section class="section-pad collaboration-section" id="multimedia"><div class="container">
+    <div class="section-head"><div><div class="eyebrow"><span class="eyebrow-rule"></span> COMUNIDAD MESA ABIERTA</div>
+    <h2>Fotos y <em>videos.</em></h2><p>Material adicional de la persona que publicó esta receta.</p></div></div>
+    <div class="media-grid" th:if="${!#lists.isEmpty(archivos)}">
+      <article class="media-tile" th:each="archivo : ${archivos}">
+        <img th:if="${archivo.tipo == 'FOTO'}" th:src="${archivo.url}" th:alt="${archivo.nombre}" loading="lazy">
+        <video th:if="${archivo.tipo == 'VIDEO'}" controls preload="metadata" th:src="${archivo.url}"></video>
+        <p th:text="${archivo.nombre}">Archivo</p>
+      </article>
+    </div>
+    <p class="soft-note" th:if="${#lists.isEmpty(archivos)}">Todavía no se han agregado archivos multimedia.</p>
+    <form th:if="${esAutor}" th:action="@{/receta/{slug}/archivo(slug=${receta.slug})}" method="post" enctype="multipart/form-data" class="action-panel">
+      <div><h3>Agregar archivo</h3><p>Solo el autor puede subir JPG, PNG o WebP (hasta 5 MB), o MP4/WebM (hasta 20 MB).</p></div>
+      <input type="file" name="archivo" accept=".jpg,.jpeg,.png,.webp,.mp4,.webm" required>
+      <button class="btn btn-accent" type="submit">Subir archivo ↗</button>
+    </form>
+  </div></section>
+  <section class="section-pad community-section" id="comunidad"><div class="container">
+    <div class="section-head"><div><div class="eyebrow"><span class="eyebrow-rule"></span> TU OPINIÓN IMPORTA</div>
+      <h2>Comentarios y <em>valoraciones.</em></h2>
+      <p th:text="|Promedio: ${#numbers.formatDecimal(valoracion.promedio,1,1)} / 5 · ${valoracion.cantidad} valoraciones|">Sin valoraciones</p>
+    </div></div>
+    <div class="community-grid">
+      <div><form th:action="@{/receta/{slug}/comentario(slug=${receta.slug})}" method="post" class="action-panel vertical">
+          <h3>Deja un comentario</h3><label for="commentText">Tu comentario</label>
+          <textarea id="commentText" name="texto" maxlength="1000" rows="4" placeholder="¿Qué te pareció esta receta?" required></textarea>
+          <button class="btn btn-accent" type="submit">Publicar comentario ↗</button>
+        </form>
+        <form th:action="@{/receta/{slug}/valorar(slug=${receta.slug})}" method="post" class="action-panel vertical">
+          <h3>Valora la receta</h3><label for="puntuacion">Puntuación (1 a 5)</label>
+          <select id="puntuacion" name="puntuacion" required><option value="5">5 — Excelente</option><option value="4">4 — Muy buena</option>
+          <option value="3">3 — Buena</option><option value="2">2 — Regular</option><option value="1">1 — Mejorable</option></select>
+          <button class="btn btn-outline" type="submit">Guardar valoración</button>
+        </form></div>
+      <div class="comments-board"><h3>Lo que dice la comunidad</h3>
+        <p class="soft-note" th:if="${#lists.isEmpty(comentarios)}">Sé la primera persona en comentar.</p>
+        <article th:each="comentario : ${comentarios}" class="comment-item">
+          <strong th:text="${comentario.usuario}">usuario</strong>
+          <p th:text="${comentario.texto}">Comentario</p>
+          <small th:text="${comentario.fecha}">Fecha</small>
+        </article>
+      </div>
+    </div>
+    <div class="action-panel share-panel" th:if="${esAutor}">
+      <div><h3>Comparte tu receta</h3><p>Publícala en el tablón de la comunidad o compártela en redes sociales.</p></div>
+      <div class="share-buttons">
+        <form th:action="@{/receta/{slug}/compartir(slug=${receta.slug})}" method="post">
+          <input type="hidden" name="plataforma" value="SITIO"><button type="submit" class="btn btn-outline">En el sitio</button>
+        </form>
+        <form th:action="@{/receta/{slug}/compartir(slug=${receta.slug})}" method="post">
+          <input type="hidden" name="plataforma" value="WHATSAPP"><button type="submit" class="btn btn-outline">WhatsApp</button>
+        </form>
+        <form th:action="@{/receta/{slug}/compartir(slug=${receta.slug})}" method="post">
+          <input type="hidden" name="plataforma" value="FACEBOOK"><button type="submit" class="btn btn-outline">Facebook</button>
+        </form>
+        <form th:action="@{/receta/{slug}/compartir(slug=${receta.slug})}" method="post">
+          <input type="hidden" name="plataforma" value="X"><button type="submit" class="btn btn-outline">X</button>
+        </form>
+      </div>
+    </div>
+  </div></section>
+  <section class="section-pad related-section"><div class="container"><div class="section-head"><div><div class="eyebrow"><span class="eyebrow-rule"></span> MÁS IDEAS DEL RECETARIO</div><h2>También te puede <em>gustar.</em></h2></div><a class="outline-link" th:href="@{/buscar}">Ver todas las recetas <span aria-hidden="true">↗</span></a></div><div class="recipe-grid related-grid"><th:block th:each="otra : ${relacionadas}"><article th:replace="~{fragments/cards :: card(${otra})}"></article></th:block></div></div></section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body></html>

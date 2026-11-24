@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Mesa Abierta (Spring Boot)",
+      "request": "launch",
+      "mainClass": "cl.duoc.mesaabierta.MesaAbiertaApplication",
+      "projectName": "mesaabierta"
+    }
+  ]
+}

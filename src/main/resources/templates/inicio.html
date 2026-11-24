@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mesa Abierta: descubre recetas inspiradoras y cocina sabores de todo el mundo.">
+  <title>Mesa Abierta · Recetas para compartir</title>
+  <link rel="icon" th:href="@{/favicon.svg}" type="image/svg+xml">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <script th:src="@{/js/main.js}" defer></script>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow light"><span class="eyebrow-rule"></span> LA COCINA NOS CONECTA</div>
+        <h1>Historias que se <em>cocinan</em> y se comparten.</h1>
+        <p>Descubre sabores, experimenta nuevas recetas y transforma cualquier día en una buena ocasión para sentarse a la mesa.</p>
+        <div class="hero-actions"><a class="btn btn-accent" th:href="@{/buscar}">Explorar recetas <span aria-hidden="true">↗</span></a><a class="subtle-link" th:href="@{/login}" sec:authorize="!isAuthenticated()">¿Ya tienes cuenta? Ingresar <span aria-hidden="true">→</span></a></div>
+        <div class="hero-stats"><div><strong th:text="|${totalRecetas}+|">8+</strong><span>Recetas seleccionadas</span></div><span class="stat-line"></span><div><strong>5</strong><span>Estilos de cocina</span></div><span class="stat-line"></span><div><strong>100%</strong><span>Ganas de cocinar</span></div></div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-photo-frame"><img th:src="${destacada.imagen}" th:alt="${destacada.fotoAlt}" th:attr="data-fallback=@{/images/food-fallback.svg}"></div>
+        <div class="hero-float"><span class="small-label">RECETA DE LA SEMANA</span><strong th:text="${destacada.nombre}">Pasta al pesto</strong><span th:text="|${destacada.minutos} min · ${destacada.dificultad} · ${destacada.pais}|">25 min</span><a th:href="@{/receta/{slug}(slug=${destacada.slug})}" aria-label="Ver receta destacada">↗</a></div>
+        <span class="hero-star" aria-hidden="true">✳</span>
+      </div>
+    </div>
+    <div class="hero-bottom container"><span>01 / DESCUBRE</span><span>DE NUESTRA COCINA A LA TUYA</span><span aria-hidden="true">↓ DESLIZA PARA EXPLORAR</span></div>
+  </section>
+  <section class="section-pad recent-section">
+    <div class="container">
+      <div class="section-head"><div><div class="eyebrow"><span class="eyebrow-rule"></span> RECIÉN SALIDAS DEL HORNO</div><h2>Algo nuevo <em>para probar.</em></h2><p>Ideas frescas para inspirar tu próxima comida.</p></div><a class="outline-link" th:href="@{/buscar}">Ver todas las recetas <span aria-hidden="true">↗</span></a></div>
+      <div class="recipe-grid">
+        <th:block th:each="receta : ${recientes}"><article th:replace="~{fragments/cards :: card(${receta})}"></article></th:block>
+      </div>
+    </div>
+  </section>
+  <section class="promo-section">
+    <div class="container promo-grid">
+      <div class="promo-symbol" aria-hidden="true">✳</div>
+      <div><div class="eyebrow light">ESPACIO PARA MARCAS</div><h2>Las buenas ideas merecen <em>un lugar en la mesa.</em></h2><p>Espacio publicitario demostrativo para empresas de alimentos, utensilios y experiencias gastronómicas.</p></div>
+      <div class="promo-stamp">TU MARCA<br>AQUÍ <span aria-hidden="true">↗</span></div>
+    </div>
+  </section>
+  <section class="section-pad popular-section">
+    <div class="container">
+      <div class="section-head"><div><div class="eyebrow"><span class="eyebrow-rule"></span> FAVORITAS DE LA COMUNIDAD</div><h2>Las más <em>populares.</em></h2><p>Recetas que siempre dan ganas de repetir.</p></div><a class="outline-link" th:href="@{/buscar}">Buscar por ingredientes <span aria-hidden="true">↗</span></a></div>
+      <div class="recipe-grid"><th:block th:each="receta : ${populares}"><article th:replace="~{fragments/cards :: card(${receta})}"></article></th:block></div>
+    </div>
+  </section>
+  <section class="bottom-cta"><div class="container bottom-cta-inner"><div><div class="eyebrow light">TU PRÓXIMA FAVORITA TE ESPERA</div><h2>¿Qué cocinamos <em>hoy?</em></h2></div><a class="btn btn-accent" th:href="@{/buscar}">Encuentra una receta <span aria-hidden="true">↗</span></a></div></section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body></html>

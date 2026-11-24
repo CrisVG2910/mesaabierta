@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publicar receta · Mesa Abierta</title><link rel="stylesheet" th:href="@{/css/styles.css}">
+<script th:src="@{/js/main.js}" defer></script></head>
+<body><header th:replace="~{fragments/layout :: header}"></header>
+<main><section class="detail-intro"><div class="container"><div class="eyebrow light">CREA Y COMPARTE</div><h1>Publica tu <em>receta.</em></h1>
+<p>Comparte una preparación con la comunidad. Después podrás agregar fotos, videos y enlaces para redes sociales.</p></div></section>
+<section class="section-pad"><div class="container"><form th:action="@{/publicar}" method="post" class="publish-form">
+<div class="field-group"><label>Nombre de la receta<input name="nombre" minlength="5" maxlength="160" required placeholder="Ej. Galletas de avena"></label>
+<label>Tipo de cocina<input name="cocina" maxlength="100" required placeholder="Ej. Chilena"></label>
+<label>País<input name="pais" maxlength="100" required placeholder="Ej. Chile"></label>
+<label>Dificultad<select name="dificultad"><option>Fácil</option><option>Media</option><option>Difícil</option></select></label>
+<label>Minutos<input type="number" name="minutos" min="1" max="1440" value="30" required></label>
+<label>Porciones<input type="number" name="porciones" min="1" max="24" value="4" required></label></div>
+<label>Resumen<textarea name="resumen" maxlength="1000" required rows="2" placeholder="Breve descripción"></textarea></label>
+<label>Introducción<textarea name="introduccion" maxlength="4000" required rows="3"></textarea></label>
+<label>Ingredientes (uno por línea)<textarea name="ingredientes" maxlength="4000" rows="6" required placeholder="2 tazas de harina&#10;1 huevo"></textarea></label>
+<label>Pasos (uno por línea)<textarea name="pasos" maxlength="7000" rows="6" required placeholder="Precalienta el horno&#10;Mezcla los ingredientes"></textarea></label>
+<button class="btn btn-accent" type="submit">Publicar receta ↗</button>
+</form></div></section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

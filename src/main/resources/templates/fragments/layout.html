@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head><meta charset="UTF-8"><title>Componentes</title></head>
+<body>
+<header th:fragment="header" class="site-header">
+  <div class="nav-shell container">
+    <a class="brand" th:href="@{/}" aria-label="Mesa Abierta, inicio">
+      <span class="brand-mark" aria-hidden="true">m<span class="mark-dot">.</span></span>
+      <span>MESA<span class="brand-light">ABIERTA</span></span>
+    </a>
+    <button type="button" class="menu-toggle" aria-controls="main-menu" aria-expanded="false" aria-label="Abrir menú" data-menu-toggle>
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="main-menu" aria-label="Navegación principal">
+      <a th:href="@{/}">Inicio</a>
+      <a th:href="@{/buscar}">Explorar recetas</a>
+      <a th:href="@{/compartidas}" sec:authorize="isAuthenticated()">Compartidas</a>
+      <a th:href="@{/publicar}" sec:authorize="isAuthenticated()">Publicar receta</a>
+      <span class="nav-small" sec:authorize="isAuthenticated()">Hola, <strong sec:authentication="name">usuario</strong></span>
+      <a class="nav-action" th:href="@{/login}" sec:authorize="!isAuthenticated()">Ingresar <span aria-hidden="true">↗</span></a>
+      <form th:action="@{/logout}" method="post" class="logout-form" sec:authorize="isAuthenticated()">
+        <button type="submit" class="nav-action">Cerrar sesión <span aria-hidden="true">↗</span></button>
+      </form>
+    </nav>
+  </div>
+</header>
+<footer th:fragment="footer" class="site-footer">
+  <div class="container footer-layout">
+    <div>
+      <a class="brand footer-brand" th:href="@{/}"><span class="brand-mark" aria-hidden="true">m<span class="mark-dot">.</span></span><span>MESA<span class="brand-light">ABIERTA</span></span></a>
+      <p>Buenas recetas. Grandes momentos.<br>Proyecto académico · ISY2202 · Duoc UC.</p>
+    </div>
+    <div class="footer-nav"><span>EXPLORA</span><a th:href="@{/}">Inicio</a><a th:href="@{/buscar}">Todas las recetas</a><a th:href="@{/compartidas}">Compartidas</a><a th:href="@{/login}">Iniciar sesión</a></div>
+    <div class="footer-note"><span>HECHO PARA COMPARTIR</span><p>El detalle de las recetas requiere autenticación. Los datos son demostrativos.</p><small>© 2026 Mesa Abierta · Segunda evaluación sumativa.</small></div>
+  </div>
+</footer>
+</body>
+</html>

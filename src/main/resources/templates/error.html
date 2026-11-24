@@ -1,0 +1,5 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Página no disponible · Mesa Abierta</title><link rel="stylesheet" th:href="@{/css/styles.css}"></head>
+<body><header th:replace="~{fragments/layout :: header}"></header><main class="error-page"><div class="container"><span class="error-symbol" aria-hidden="true">✳</span><p class="eyebrow">ALGO SALIÓ MAL</p><h1>Esta página no está <em>en el menú.</em></h1><p>Es posible que el enlace ya no exista o que esta sección no esté disponible.</p><a class="btn btn-dark" th:href="@{/}">Volver al inicio ↗</a></div></main><footer th:replace="~{fragments/layout :: footer}"></footer></body>
+</html>

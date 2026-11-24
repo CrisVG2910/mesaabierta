@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Inicia sesión en Mesa Abierta para consultar ingredientes y preparación de recetas.">
+  <title>Ingresar · Mesa Abierta</title>
+  <link rel="icon" th:href="@{/favicon.svg}" type="image/svg+xml"><link rel="stylesheet" th:href="@{/css/styles.css}"><script th:src="@{/js/main.js}" defer></script>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="login-main"><div class="container login-layout">
+  <div class="login-story"><span class="login-shape" aria-hidden="true">✳</span><div class="eyebrow light"><span class="eyebrow-rule"></span> UN LUGAR EN NUESTRA MESA</div><h1>Lo mejor sucede <em>cuando compartimos.</em></h1><p>Ingresa para descubrir los ingredientes, el paso a paso y todos los secretos detrás de cada receta.</p><div class="story-quote">“La cocina es el corazón de una buena conversación.”</div><div class="story-caption">MESA ABIERTA / ISY2202</div></div>
+  <div class="login-card"><div class="eyebrow"><span class="eyebrow-rule"></span> BIENVENIDO DE NUEVO</div><h2>Volvamos a <em>cocinar.</em></h2><p>Inicia sesión con tu usuario para acceder a las recetas completas.</p>
+    <div class="alert alert-error" th:if="${param.error != null}" role="alert">Los datos ingresados no son correctos. Revisa tu usuario y contraseña.</div>
+    <div class="alert alert-success" th:if="${param.logout != null}" role="status">Tu sesión se ha cerrado correctamente.</div>
+    <div class="alert alert-success" sec:authorize="isAuthenticated()" role="status">Ya tienes una sesión activa. <a th:href="@{/buscar}">Explorar recetas</a>.</div>
+    <form class="login-form" th:action="@{/login}" method="post">
+      <label class="field"><span>Nombre de usuario</span><input name="username" type="text" placeholder="Tu usuario" autocomplete="username" required maxlength="60" autofocus></label>
+      <label class="field"><span>Contraseña</span><input name="password" type="password" placeholder="Tu contraseña" autocomplete="current-password" required></label>
+      <button type="submit" class="btn btn-dark full-width">Ingresar a mi cuenta <span aria-hidden="true">↗</span></button>
+    </form>
+    <div class="login-demo"><span>CUENTAS DE EVALUACIÓN</span><p>Este proyecto incluye tres usuarios de demostración. Sus credenciales están documentadas en el archivo <code>README.md</code> del proyecto.</p></div>
+    <a th:href="@{/}" class="back-link">← Volver al inicio</a>
+  </div>
+</div></main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body></html>

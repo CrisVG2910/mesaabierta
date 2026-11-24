@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Busca recetas por nombre, cocina, ingredientes, país y dificultad.">
+  <title>Explorar recetas · Mesa Abierta</title>
+  <link rel="icon" th:href="@{/favicon.svg}" type="image/svg+xml"><link rel="stylesheet" th:href="@{/css/styles.css}"><script th:src="@{/js/main.js}" defer></script>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main>
+  <section class="page-intro"><div class="container"><div class="eyebrow light"><span class="eyebrow-rule"></span> DE TODO UN POCO, PARA TODOS</div><h1>Encuentra tu próximo <em>antojo.</em></h1><p>Filtra por tus ingredientes, el origen de cada receta o la dificultad que prefieras.</p><span class="intro-mark" aria-hidden="true">✳</span></div></section>
+  <section class="explore-section section-pad"><div class="container">
+    <div class="filter-panel"><div class="filter-heading"><h2>Encuentra tu receta</h2><span>Personaliza tu búsqueda</span></div>
+      <form th:action="@{/buscar}" method="get" class="filter-grid" role="search">
+        <label class="field field-wide"><span>Nombre de receta</span><input type="search" name="nombre" placeholder="Ej. pizza, pasta, brownie..." th:value="${nombre}" maxlength="100" autocomplete="off"></label>
+        <label class="field"><span>Tipo de cocina</span><select name="cocina"><option value="">Todas las cocinas</option><option th:each="op : ${cocinas}" th:value="${op}" th:text="${op}" th:selected="${op == cocina}"></option></select></label>
+        <label class="field"><span>Ingrediente</span><input type="search" name="ingrediente" placeholder="Ej. tomate" th:value="${ingrediente}" maxlength="100"></label>
+        <label class="field"><span>País de origen</span><select name="pais"><option value="">Todos los países</option><option th:each="op : ${paises}" th:value="${op}" th:text="${op}" th:selected="${op == pais}"></option></select></label>
+        <label class="field"><span>Dificultad</span><select name="dificultad"><option value="">Cualquier nivel</option><option th:each="op : ${dificultades}" th:value="${op}" th:text="${op}" th:selected="${op == dificultad}"></option></select></label>
+        <div class="filter-actions"><button class="btn btn-dark" type="submit">Buscar recetas <span aria-hidden="true">↗</span></button><a class="clear-filters" th:href="@{/buscar}">Limpiar filtros</a></div>
+      </form>
+    </div>
+    <div class="result-bar"><div><span class="eyebrow">NUESTRO RECETARIO</span><h2 th:text="${filtrando} ? 'Resultados de búsqueda' : 'Todas las recetas'">Todas las recetas</h2></div><span class="result-count" th:text="|${#lists.size(recetas)} recetas encontradas|">8 recetas encontradas</span></div>
+    <div class="recipe-grid" th:if="${!#lists.isEmpty(recetas)}"><th:block th:each="receta : ${recetas}"><article th:replace="~{fragments/cards :: card(${receta})}"></article></th:block></div>
+    <div class="empty-state" th:if="${#lists.isEmpty(recetas)}"><span class="empty-illustration" aria-hidden="true">◌</span><h3>No encontramos esa combinación.</h3><p>Prueba con otros ingredientes o reduce la cantidad de filtros.</p><a class="btn btn-dark" th:href="@{/buscar}">Ver todas las recetas <span aria-hidden="true">↗</span></a></div>
+    <div class="access-note"><span aria-hidden="true">🔒</span><p><strong>Un recetario para compartir, con acceso seguro.</strong> Puedes explorar libremente. Para ver ingredientes e instrucciones, inicia sesión con una de las cuentas demostrativas.</p><a th:href="@{/login}">Ingresar →</a></div>
+  </div></section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body></html>
